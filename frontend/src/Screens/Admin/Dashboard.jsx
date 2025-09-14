@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getCompletedInterviews, getOngoingInterviews } from "../../api/Services/Candidate.jsx";
 import { useSocket } from "../../Context/SocketWrapper.jsx";
-import { useParams, useNavigate } from "react-router-dom"; // ✅ useNavigate for logout redirect
+import { useParams, useNavigate } from "react-router-dom"; 
 import Table from "./components/Table.jsx";
 import BackgroundGlow from "./components/BackgroundGlow.jsx";
 import LogsModal from "./components/LogsModal.jsx";
@@ -17,12 +17,11 @@ const AdminDashboard = () => {
   const [selectedCandidateLogs, setSelectedCandidateLogs] = useState([]);
   const socket = useSocket();
   const { adminId } = useParams();
-  const navigate = useNavigate(); // ✅ navigation hook
+  const navigate = useNavigate();
 
   // Logout handler
   const handleLogout = () => {
-    removeCookieItem("token")
-
+    removeCookieItem("token");
     navigate("/");
   };
 
@@ -170,24 +169,24 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white relative overflow-hidden p-10">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white relative overflow-hidden p-4 sm:p-6 md:p-10">
       <BackgroundGlow />
 
       {/* Header with Logout */}
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-5xl font-extrabold tracking-wide animate-fade-in">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-wide animate-fade-in">
           Admin<span className="text-indigo-500"> Dashboard</span>
         </h1>
         <button
           onClick={handleLogout}
-          className="bg-red-600 hover:bg-red-700 pointer-cursor text-white px-4 py-2 rounded-lg shadow-lg transition"
+          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg transition w-full sm:w-auto"
         >
           Logout
         </button>
       </div>
 
       {/* Tables */}
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         <Table
           title="Completed Interviews"
           data={completedCandidates}
