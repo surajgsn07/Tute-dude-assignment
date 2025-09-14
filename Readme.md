@@ -1,8 +1,7 @@
-Here’s a **README.md** draft tailored for your project submission. It’s clean, structured, and explains your **AI Interview Proctoring System** clearly:
 
 ---
 
-# AI Interview Proctoring System 🎥🤖
+# Tute-dude-assignment 🎥🤖
 
 This is my submission for the **TuteDude AI Interview Project Assignment**.
 The project simulates a real-time **AI-powered interview platform** with two main roles:
@@ -67,8 +66,8 @@ The project is built with the **MERN Stack + WebSockets** for real-time updates.
 ### 🔹 Clone the Repository
 
 ```bash
-git clone <repo-url>
-cd ai-interview-project
+git clone https://github.com/surajgsn07/Tute-dude-assignment.git
+cd Tute-dude-assignment
 ```
 
 ---
@@ -98,7 +97,7 @@ cd ai-interview-project
    SALT_ROUNDS=10
    FRONTEND_URL="http://localhost:5173"
    ```
-4. Start backend server:
+4. Start backend server (dev mode):
 
    ```bash
    npm run dev
@@ -175,6 +174,7 @@ import * as tf from "@tensorflow/tfjs";
 ## 👨‍💻 Author
 
 Assignment submission for **TuteDude**.
+Repo: [Tute-dude-assignment](https://github.com/<your-username>/Tute-dude-assignment)
 Built with ❤️ using **MERN + AI/ML libraries**.
 
 ---
