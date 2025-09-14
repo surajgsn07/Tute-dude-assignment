@@ -1,6 +1,6 @@
 const express = require("express");
 const http = require("http");
-const { Server } = require("socket.io"); // <-- Socket.IO
+const { Server } = require("socket.io");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./db");
@@ -10,17 +10,17 @@ const Candidate = require("./models/candidate");
 dotenv.config();
 
 const app = express();
-const server = http.createServer(app); // <-- Wrap express app
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin:  process.env.FRONTEND_URL,
   methods: ["GET", "POST"],
   credentials: true,
 }));
@@ -33,8 +33,8 @@ app.use("/candidate", candidateRoutes);
 // -------------------- SOCKET.IO --------------------
 
 // Store connected admins and candidates
-const admins = new Map(); // socketId -> adminId
-const candidates = new Map(); // socketId -> candidateId
+const admins = new Map();
+const candidates = new Map();
 
 io.on("connection", (socket) => {
   console.log(`⚡ Socket connected: ${socket.id}`);
