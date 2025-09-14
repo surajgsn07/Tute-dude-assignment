@@ -54,10 +54,10 @@ const getPublicId = (url) => {
 const getUploadSignature = (folder = "interviews") => {
   const timestamp = Math.floor(Date.now() / 1000);
 
-  // Params to sign must match the ones you'll send from frontend
+  
   const paramsToSign = {
     timestamp,
-    folder, // optional, but if added here MUST also be sent in FormData
+    folder
   };
 
   const signature = cloudinary.utils.api_sign_request(

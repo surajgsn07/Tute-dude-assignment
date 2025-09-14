@@ -3,9 +3,9 @@ import axiosRetry from 'axios-retry';
 import Cookie from "universal-cookie";
 import { getCookieItem } from '../Utils/cookies-helpers';
 
-const axiosInstance = axios.create({ 
-  baseURL:"http://localhost:3000",
-  withCredentials: true, 
+const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true,
 });
 
 axiosRetry(axiosInstance, {
