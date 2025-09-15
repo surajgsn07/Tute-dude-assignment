@@ -48,12 +48,19 @@ export const generatePDF = async (data) => {
   // Determine Total Violations Color
   const violationsColor = data.violations > 50 ? [255, 0, 0] : [0, 0, 0];
 
+  // Calculate Lost Focus Time (ms → seconds)
+  const lostFocusTime =
+    (data.details?.events || [])
+      .filter((e) => e.type === "NO_FACE" || e.type === "LOOK_AWAY")
+      .reduce((sum, e) => sum + (e.durationMs || 0), 0) / 1000; // convert ms → sec
+
   const candidateInfo = [
     ["Candidate Name", data.name],
     ["Interview Date", data.interviewDate],
     ["Duration", data.duration],
     ["Integrity Score", data.integrityScore + "%"],
     ["Total Violations", data.violations],
+    ["Lost Focus Time", `${lostFocusTime}s`],
   ];
 
   autoTable(doc, {
@@ -66,6 +73,7 @@ export const generatePDF = async (data) => {
         textColor: (row, col) => {
           if (row.index === 3) return integrityColor; // Integrity Score
           if (row.index === 4) return violationsColor; // Violations
+          if (row.index === 5) return [200, 150, 0]; // Lost Focus Time = Yellow
           return [0, 0, 0];
         },
       },
