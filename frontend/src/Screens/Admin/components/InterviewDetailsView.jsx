@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
+import { generatePDF } from "../../../Utils/create-proctoring-report";
 
-// ✅ Interview Details View Component
 const InterviewDetailsView = ({ candidate, getScoreColor, getEventColor }) => {
   const videoRef = useRef(null);
 
@@ -79,12 +79,23 @@ const InterviewDetailsView = ({ candidate, getScoreColor, getEventColor }) => {
           </div>
         </div>
 
-        <div className="bg-gray-800 p-3 rounded-lg">
+        <div className="bg-gray-800 p-3 rounded-lg mb-4">
           <div className="text-gray-400">Total Violations</div>
           <div className="text-red-400 text-lg">
             {candidate.violations || 0}
           </div>
         </div>
+
+        {/* 👉 Download Report Button (only button, no function) */}
+        <button
+          onClick={() => {
+            console.log("Download Proctoring Report clicked!");
+            generatePDF(candidate);
+          }}
+          className="w-full bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg shadow-md"
+        >
+          Download Proctoring Report
+        </button>
       </div>
     </div>
   );

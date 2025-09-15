@@ -19,6 +19,7 @@ function CandidateInterview() {
   const navigate = useNavigate();
   const[submiting,setSubmiting]=useState(false)
   const streamRef = useRef(null);
+  const cameraRef = useRef(null);
   const eventsRef = useRef([]);
   const socket = useSocket();
 
@@ -245,21 +246,25 @@ function CandidateInterview() {
     initCamera();
 
     return () => {
+
+        stopAllMediaDevices();
       // Stop MediaRecorder if recording
       if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
         mediaRecorderRef.current.stop();
+        mediaRecorderRef.current = null;
       }
 
       // Stop all media tracks
       if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => {
-          track.stop();
-        });
+        
+        streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
       }
 
       // Close audio context
       if (audioContextRef.current) {
         audioContextRef.current.close();
+        audioContextRef.current = null;
       }
 
 
@@ -283,8 +288,101 @@ function CandidateInterview() {
         clearTimeout(voiceTimer.current);
         voiceTimer.current = null;
       }
+
+      setCameraInitialized(false);
+
+
+      if (cameraRef.current) {
+    cameraRef.current.stop();
+    cameraRef.current = null;
+  }
+  console.log({videoRef,audioContextRef,mediaRecorderRef,cameraRef,streamRef,eventsRef})
+      
     };
   }, []);
+
+
+  useEffect(() => {
+      
+
+    return () => {
+
+        stopAllMediaDevices();
+      // Stop MediaRecorder if recording
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
+        mediaRecorderRef.current.stop();
+        mediaRecorderRef.current = null;
+      }
+
+      // Stop all media tracks
+      if (streamRef.current) {
+        
+        streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+      }
+
+      // Close audio context
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+        audioContextRef.current = null;
+      }
+
+
+      // Clear video source
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
+
+      // Clear timers
+      if (noFaceTimer.current) {
+        clearTimeout(noFaceTimer.current);
+        noFaceTimer.current = null;
+      }
+
+      if (lookAwayTimer.current) {
+        clearTimeout(lookAwayTimer.current);
+        lookAwayTimer.current = null;
+      }
+
+      if (voiceTimer.current) {
+        clearTimeout(voiceTimer.current);
+        voiceTimer.current = null;
+      }
+
+      setCameraInitialized(false);
+
+
+      if (cameraRef.current) {
+    cameraRef.current.stop();
+    cameraRef.current = null;
+  }
+  console.log({videoRef,audioContextRef,mediaRecorderRef,cameraRef,streamRef,eventsRef})
+      
+    };
+  },[])
+
+async function stopAllMediaDevices() {
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+
+    for (const device of devices) {
+      if (device.kind === "videoinput" || device.kind === "audioinput") {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: device.kind === "videoinput" ? { deviceId: device.deviceId } : false,
+            audio: device.kind === "audioinput" ? { deviceId: device.deviceId } : false,
+          });
+
+          stream.getTracks().forEach(track => track.stop());
+        } catch (err) {
+          // Ignore errors if device cannot be opened
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Error stopping all media devices:", err);
+  }
+}
 
 
 
@@ -295,11 +393,13 @@ function CandidateInterview() {
     }
   }, [cameraInitialized]);
 
+
+
   const startFaceMeshCamera = (faceMeshModel) => {
     let lastProcessedTime = 0;
     const interval = 300; // ms
 
-    const camera = new Camera(videoRef.current, {
+     cameraRef.current = new Camera(videoRef.current, {
       onFrame: async () => {
         const now = Date.now();
         if (now - lastProcessedTime >= interval && videoRef.current && videoRef.current.readyState >= 2) {
@@ -310,7 +410,7 @@ function CandidateInterview() {
       width: 640,
       height: 480,
     });
-    camera.start();
+     cameraRef.current.start();
   };
 
   const logEvent = (type, duration = 0) => {

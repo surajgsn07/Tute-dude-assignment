@@ -159,8 +159,6 @@ const AdminDashboard = () => {
     switch (type) {
       case "warning":
         return "text-yellow-400";
-      case "success":
-        return "text-green-400";
       case "info":
         return "text-blue-400";
       default:
